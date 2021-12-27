@@ -102,6 +102,16 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+            ElevatedButton(
+              child: Text('Press this'),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) {
+                    return AnotherScreen(title: "Go back");
+                  }),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -114,3 +124,21 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+class AnotherScreen extends StatelessWidget {
+  AnotherScreen({required this.title});
+  final String title;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          child: Text(title),
+          onPressed: () {
+            // To be added
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
+    );
+  }
+}
