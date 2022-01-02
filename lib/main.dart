@@ -24,7 +24,18 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      //home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      /*routes: {
+        '/': (context) => MyHomePage(title: 'Flutter New App'),
+        '/screen2': (context) => AnotherScreen(title: "Go back"),
+      },*/
+      onGenerateRoute: (settings) {
+        if (settings.name == '/') {
+          return MaterialPageRoute(builder: (context) =>    MyHomePage(title: "Flutter Demo Home Page"));
+        } else if (settings.name == '/screen2') {
+          return MaterialPageRoute(builder: (context) =>    AnotherScreen(title: settings.arguments as String));
+        }
+      },
     );
   }
 }
@@ -104,11 +115,14 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               child: Text('Press this'),
-              onPressed: () {
-                Navigator.of(context).push(
+              onPressed: () async {
+                bool? outcome = await Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) {
                     return AnotherScreen(title: "Go back");
                   }),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("$outcome")),
                 );
               },
             ),
@@ -131,12 +145,22 @@ class AnotherScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ElevatedButton(
-          child: Text(title),
-          onPressed: () {
-            // To be added
-            Navigator.of(context).pop();
-          },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              child: Text(title),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+            ElevatedButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+          ],
         ),
       ),
     );
