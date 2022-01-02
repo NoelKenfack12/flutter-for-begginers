@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  String? _selectedTown;
+
+  void _setTownName(String townName) {
+    this.setState(() {
+      _selectedTown = townName;
+    });
+  }
 
   // This widget is the root of your application.
   @override
@@ -24,24 +35,36 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      //home: const MyHomePage(title: 'Flutter Demo Home Page'),
-      /*routes: {
-        '/': (context) => MyHomePage(title: 'Flutter New App'),
-        '/screen2': (context) => AnotherScreen(title: "Go back"),
-      },*/
-      onGenerateRoute: (settings) {
-        if (settings.name == '/') {
-          return MaterialPageRoute(builder: (context) =>    MyHomePage(title: "Flutter Demo Home Page"));
-        } else if (settings.name == '/screen2') {
-          return MaterialPageRoute(builder: (context) =>    AnotherScreen(title: settings.arguments as String));
-        }
-      },
+      home: Navigator(
+        pages: [
+          MaterialPage(
+              child: MyHomePage(
+                title: "Press this",
+                townNameCallback: _setTownName,
+              )),
+            if (_selectedTown != null)
+            MaterialPage(
+              child: TownScreen(title: _selectedTown!),
+            ),
+        ],
+        onPopPage: (route, result) {
+          if (!route.didPop(result)) {
+            return false;
+          }
+          setState(() {
+            _selectedTown = null;
+          });
+
+          return true;
+        },
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  MyHomePage({required this.title, required this.townNameCallback});
+  final void Function(String) townNameCallback;
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -114,16 +137,15 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.headline4,
             ),
             ElevatedButton(
-              child: Text('Press this'),
+              child: Text('Whitby'),
+              onPressed: () {
+                widget.townNameCallback("Whitby");
+              },
+            ),
+            ElevatedButton(
+              child: Text('Scarborough'),
               onPressed: () async {
-                bool? outcome = await Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) {
-                    return AnotherScreen(title: "Go back");
-                  }),
-                );
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("$outcome")),
-                );
+                widget.townNameCallback("Scarborough");
               },
             ),
           ],
@@ -138,8 +160,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class AnotherScreen extends StatelessWidget {
-  AnotherScreen({required this.title});
+class TownScreen extends StatelessWidget {
+  TownScreen({required this.title});
   final String title;
   @override
   Widget build(BuildContext context) {
@@ -148,16 +170,11 @@ class AnotherScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(title),
             ElevatedButton(
-              child: Text(title),
+              child: Text("Close"),
               onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-            ),
-            ElevatedButton(
-              child: Text("Cancel"),
-              onPressed: () {
-                Navigator.of(context).pop(false);
+                Navigator.of(context).pop();
               },
             ),
           ],
