@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'red_text_widget.dart';
 
 void main() {
   runApp(MyApp());
@@ -129,8 +130,8 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            RedTextWidget(
+              text: 'You have pushed the button this many times:',
             ),
             Text(
               '$_counter',
