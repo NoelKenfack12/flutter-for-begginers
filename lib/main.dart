@@ -8,9 +8,12 @@ void main() => runApp(MasterPlanApp());
 class MasterPlanApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.purple),
-      home: PlanCreatorScreen(),
+
+    return PlanProvider(
+      child: MaterialApp(
+        theme: ThemeData(primarySwatch: Colors.purple),
+        home: PlanCreatorScreen(),
+      ),
     );
   }
 }

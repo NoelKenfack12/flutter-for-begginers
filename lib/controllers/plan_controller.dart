@@ -1,6 +1,7 @@
 import '../services/plan_services.dart';
 import '../models/data_layer.dart';
 
+/*
 class PlanController {
   final services = PlanServices();
   List<Plan> get plans => List.unmodifiable(services.getAllPlans());
@@ -46,3 +47,4 @@ class PlanController {
   }
 
 }
+*/
