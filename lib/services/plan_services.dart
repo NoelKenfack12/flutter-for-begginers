@@ -2,7 +2,7 @@ import 'package:notes/repositories/in_memory_cache.dart';
 import 'package:notes/repositories/repository.dart';
 import '../models/data_layer.dart';
 
-/*
+
 class PlanServices {
   Repository _repository = InMemoryCache();
 
@@ -29,7 +29,7 @@ class PlanServices {
   }
 
   void addTask(Plan plan, String description) {
-    final id = plan.tasks.last?.id ?? 0 + 1;
+    final id = (plan.tasks.length > 0)? plan.tasks.last.id + 1 : 1;
     final task = Task(id: id, description: description);
     plan.tasks.add(task);
     savePlan(plan);
@@ -39,4 +39,4 @@ class PlanServices {
     plan.tasks.remove(task);
     savePlan(plan);
   }
-}*/
+}

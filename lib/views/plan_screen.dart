@@ -30,7 +30,7 @@ class _PlanScreenState extends State<PlanScreen> {
     //final plan = PlanProvider.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text('Master Plan')),
+        appBar: AppBar(title: Text('Master Plan')),
         body: Column(children: <Widget>[
           Expanded(child: _buildList()),
           SafeArea(child: Text(plan.completenessMessage))
