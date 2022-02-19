@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:store_data/httphelper.dart';
 import 'dart:convert';
 import './pizza.dart';
 import './savedata.dart';
@@ -31,11 +32,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
     @override
     void initState() {
-        readJsonFile();
+        //readJsonFile();
+        callPizzas(); 
         super.initState();
     }
 
     String pizzaString = '';
+
+    Future<List<Pizza>> callPizzas() async { 
+      HttpHelper helper = HttpHelper(); 
+      List<Pizza> pizzas = await helper.getPizzaList(); 
+      return pizzas; 
+    } 
 
     @override
     Widget build(BuildContext context) {
@@ -76,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
             body: Container(
               //child: Text(pizzaString)
                 child: FutureBuilder(
-                    future: readJsonFile(),
+                    future: callPizzas(),
                     builder: (BuildContext context, AsyncSnapshot<List<Pizza>> pizzas) {
                         return ListView.builder(
                             itemCount: pizzas.data?.length ?? 0,
@@ -85,8 +93,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                     title: Text(pizzas.data![position].pizzaName ?? 'Noel'),
                                     subtitle: Text((pizzas.data![position].description ?? '') + ' - € ' + (pizzas.data![position].price?.toString() ?? '')),
                                 );
-                        }
-                    );
+                            }
+                        );
                     }
                 ),
             ),
